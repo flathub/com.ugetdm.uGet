@@ -27,8 +27,8 @@ modules:
       - --disable-static
     sources:
       - type: archive
-        url: https://c-ares.haxx.se/download/c-ares-1.25.0.tar.gz
-        sha256: 71832b93a48f5ff579c505f4869120c14e57b783275367207f1a98314aa724e5
+        url: https://c-ares.haxx.se/download/c-ares-1.26.0.tar.gz
+        sha256: bed58c4f02b009080ebda6c2467ba469722ac6aebbf4497dc44a83d8c6194e50
         x-checker-data:
           type: anitya
           project-id: 5840
@@ -58,7 +58,7 @@ modules:
         x-checker-data:
           type: anitya
           project-id: 1730
-          url-template: https://www.libssh2.org/download/libssh2-$version.tar.gz    
+          url-template: https://www.libssh2.org/download/libssh2-$version.tar.gz
     post-install:
       - install -p -D -m 0644 "../COPYING" -t "${FLATPAK_DEST}/share/licenses/libssh2/";
 
@@ -100,10 +100,10 @@ modules:
         x-checker-data:
           type: anitya
           project-id: 109
-          url-template: https://github.com/aria2/aria2/releases/download/release-$version/aria2-$version.tar.xz  
+          url-template: https://github.com/aria2/aria2/releases/download/release-$version/aria2-$version.tar.xz
     post-install:
       - install -p -D -m 0644 "COPYING" LICENSE* -t "${FLATPAK_DEST}/share/licenses/aria2/";
-  
+
   - name: uGet
     sources:
       - type: archive
@@ -112,16 +112,15 @@ modules:
       - type: patch
         path: gcc10.patch
       - type: patch
-        path: use_download_dir_as_default.patch        
+        path: use_download_dir_as_default.patch
       - type: file
         path: com.ugetdm.uGet.appdata.xml
-    
+
     post-install:
       # tray and desktop entry icons
-      - icon_in="pixmaps/icons/hicolor/scalable/apps/uget-icon.svg";
-        icon_out="uget-icon.png";
-        rsvg-convert "${icon_in}" -w "512" -h "512" -a -f png -o "${icon_out}";
-        install -Dm644 ${icon_out} ${FLATPAK_DEST}/share/icons/hicolor/16x16/apps/uget-icon.png;
+      - icon_in="pixmaps/icons/hicolor/scalable/apps/uget-icon.svg"; icon_out="uget-icon.png";
+        rsvg-convert "${icon_in}" -w "512" -h "512" -a -f png -o "${icon_out}"; install
+        -Dm644 ${icon_out} ${FLATPAK_DEST}/share/icons/hicolor/16x16/apps/uget-icon.png;
         install -Dm644 ${icon_out} ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png;
 
       - install -p -D -m 0644 ${FLATPAK_ID}.appdata.xml -t "${FLATPAK_DEST}/share/appdata/";
@@ -134,7 +133,7 @@ modules:
       - install -p -D -m 0644 "COPYING" -t "${FLATPAK_DEST}/share/licenses/uget/";
 
 cleanup:
-   - /include
-   - /lib/pkgconfig
-   - /share/man
-   - '*.la'
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+  - '*.la'
