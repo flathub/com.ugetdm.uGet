@@ -22,26 +22,17 @@ modules:
   - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
 
   - name: c-ares
-    config-opts:
-      - --enable-shared
-      - --disable-static
-    sources:
-      - type: archive
-        url: https://c-ares.haxx.se/download/c-ares-1.29.0.tar.gz
-        sha256: 0b89fa425b825c4c7bc708494f374ae69340e4d1fdc64523bdbb2750bfc02ea7
-        x-checker-data:
-          type: anitya
-          project-id: 5840
-          url-template: https://c-ares.haxx.se/download/c-ares-$version.tar.gz
-      - type: shell
-        commands:
-          - cp -p /usr/share/automake-*/config.{sub,guess} .;
-          - autoreconf -vfi;
-    post-install:
-      - install -p -D -m 0644 "LICENSE.md" -t "${FLATPAK_DEST}/share/licenses/c-ares/";
     cleanup:
       - /include
       - /share
+    sources:
+      - type: archive
+        url: https://github.com/c-ares/c-ares/releases/download/v1.34.4/c-ares-1.34.4.tar.gz
+        sha256: fa38dbed659ee4cc5a32df5e27deda575fa6852c79a72ba1af85de35a6ae222f
+        x-checker-data:
+          type: anitya
+          project-id: 5840
+          url-template: https://github.com/c-ares/c-ares/releases/download/v$version/c-ares-$version.tar.gz
 
   - name: libssh2
     buildsystem: cmake-ninja
@@ -53,8 +44,8 @@ modules:
       - /share/doc
     sources:
       - type: archive
-        url: https://www.libssh2.org/download/libssh2-1.11.0.tar.gz
-        sha256: 3736161e41e2693324deb38c26cfdc3efe6209d634ba4258db1cecff6a5ad461
+        url: https://www.libssh2.org/download/libssh2-1.11.1.tar.gz
+        sha256: d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7
         x-checker-data:
           type: anitya
           project-id: 1730
@@ -72,8 +63,8 @@ modules:
       - -Ddocbook_docs=disabled
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.3.tar.xz
-        sha256: ee8f3ef946156ad3406fdf45feedbdcd932dbd211ab4f16f75eba4f36fb2f6c0
+        url: https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.4.tar.xz
+        sha256: 8fa04d4ebdc155b0a239df88bd9f09e8f2739d5707a1390b427ab4985f83d25a
         x-checker-data:
           type: gnome
           name: libnotify
