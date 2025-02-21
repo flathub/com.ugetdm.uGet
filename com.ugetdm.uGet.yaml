@@ -16,6 +16,7 @@ finish-args:
   - --share=network
   # Tray icon
   - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
   # OpenGL access
   - --device=dri
 modules:
