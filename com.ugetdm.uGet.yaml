@@ -1,6 +1,6 @@
 app-id: com.ugetdm.uGet
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 command: uget-gtk
 finish-args:
@@ -101,7 +101,9 @@ modules:
         url: https://sourceforge.net/projects/urlget/files/uget%20%28stable%29/2.2.3/uget-2.2.3-1.tar.gz
         sha256: 11356e4242151b9014fa6209c1f0360b699b72ef8ab47dbeb81cc23be7db9049
       - type: patch
-        path: gcc10.patch
+        path: gcc-10.patch
+      - type: patch
+        path: gcc-15.patch
       - type: patch
         path: use_download_dir_as_default.patch
       - type: file
