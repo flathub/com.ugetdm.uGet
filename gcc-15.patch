@@ -1,0 +1,15 @@
+Description: Fix FTBFS with GCC 15
+Author: Adrian Bunk <bunk@debian.org>
+Bug-Debian: https://bugs.debian.org/1098030
+
+--- uget-2.2.3.orig/ui-gtk/UgtkSettingDialog.h
++++ uget-2.2.3/ui-gtk/UgtkSettingDialog.h
+@@ -75,7 +75,7 @@ struct UgtkSettingDialog
+ 	struct UgtkMediaWebsiteForm   media_website;
+ };
+ 
+-UgtkSettingDialog*  ugtk_setting_dialog_new ();
++UgtkSettingDialog*  ugtk_setting_dialog_new (const gchar* title, GtkWindow* parent);
+ void                ugtk_setting_dialog_free (UgtkSettingDialog* sdialog);
+ 
+ void  ugtk_setting_dialog_run (UgtkSettingDialog* dialog, UgtkApp* app);
