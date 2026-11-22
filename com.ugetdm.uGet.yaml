@@ -1,8 +1,10 @@
 app-id: com.ugetdm.uGet
 runtime: org.freedesktop.Platform
-runtime-version: '25.08'
+runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
 command: uget-gtk
+rename-icon: uget-icon
+rename-desktop-file: uget-gtk.desktop
 finish-args:
   - --share=ipc
   - --socket=fallback-x11
@@ -18,13 +20,18 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   # OpenGL access
   - --device=dri
+cleanup:
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /share/doc
+  - /share/man
+  - '*.la'
+  - "*.a"
 modules:
   - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
 
   - name: c-ares
-    cleanup:
-      - /include
-      - /share
     sources:
       - type: archive
         url: https://github.com/c-ares/c-ares/releases/download/v1.34.9/c-ares-1.34.9.tar.gz
@@ -40,8 +47,6 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DBUILD_SHARED_LIBS:BOOL=ON
-    cleanup:
-      - /share/doc
     sources:
       - type: archive
         url: https://www.libssh2.org/download/libssh2-1.11.1.tar.gz
@@ -50,8 +55,6 @@ modules:
           type: anitya
           project-id: 1730
           url-template: https://www.libssh2.org/download/libssh2-$version.tar.gz
-    post-install:
-      - install -p -D -m 0644 "../COPYING" -t "${FLATPAK_DEST}/share/licenses/libssh2/";
 
   - name: aria2
     config-opts:
@@ -75,41 +78,21 @@ modules:
           type: anitya
           project-id: 109
           url-template: https://github.com/aria2/aria2/releases/download/release-$version/aria2-$version.tar.xz
-    post-install:
-      - install -p -D -m 0644 "COPYING" LICENSE* -t "${FLATPAK_DEST}/share/licenses/aria2/";
 
   - name: uGet
+    post-install:
+      - install -Dm644 pixmaps/icons/hicolor/scalable/apps/uget-icon.svg -t /app/share/icons/hicolor/scalable/apps/
+      - install -Dm644 ${FLATPAK_ID}.appdata.xml -t /app/share/metainfo/
+      - install -Dm644 uget-gtk.desktop -t /app/share/applications/
+      - desktop-file-edit --set-key=Exec --set-value="uget-gtk %u" /app/share/applications/uget-gtk.desktop
     sources:
       - type: archive
         url: https://sourceforge.net/projects/urlget/files/uget%20%28stable%29/2.2.3/uget-2.2.3-1.tar.gz
         sha256: 11356e4242151b9014fa6209c1f0360b699b72ef8ab47dbeb81cc23be7db9049
       - type: patch
-        path: gcc-10.patch
-      - type: patch
-        path: gcc-15.patch
-      - type: patch
-        path: use_download_dir_as_default.patch
+        paths:
+          - gcc-10.patch
+          - gcc-15.patch
+          - use_download_dir_as_default.patch
       - type: file
         path: com.ugetdm.uGet.appdata.xml
-
-    post-install:
-      # tray and desktop entry icons
-      - icon_in="pixmaps/icons/hicolor/scalable/apps/uget-icon.svg"; icon_out="uget-icon.png";
-        rsvg-convert "${icon_in}" -w "512" -h "512" -a -f png -o "${icon_out}"; install
-        -Dm644 ${icon_out} ${FLATPAK_DEST}/share/icons/hicolor/16x16/apps/uget-icon.png;
-        install -Dm644 ${icon_out} ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png;
-
-      - install -p -D -m 0644 ${FLATPAK_ID}.appdata.xml -t "${FLATPAK_DEST}/share/appdata/";
-      - mv uget-gtk.desktop ${FLATPAK_ID}.desktop
-      - install -p -D -m 0644 ${FLATPAK_ID}.desktop -t "${FLATPAK_DEST}/share/applications/";
-
-      - desktop-file-edit --set-key Exec --set-value "uget-gtk %u" ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
-      - desktop-file-edit --set-icon ${FLATPAK_ID} ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
-
-      - install -p -D -m 0644 "COPYING" -t "${FLATPAK_DEST}/share/licenses/uget/";
-
-cleanup:
-  - /include
-  - /lib/pkgconfig
-  - /share/man
-  - '*.la'
